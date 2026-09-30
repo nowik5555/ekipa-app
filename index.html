@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#7c6cff">
+  <meta name="description" content="Ekipa – znajdź ludzi do wspólnych pasji.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ekipa">
+  <link rel="manifest" href='data:application/manifest+json,{"name":"Ekipa","short_name":"Ekipa","start_url":".","display":"standalone","background_color":"#0b0b1c","theme_color":"#7c6cff"}'>
+  <title>Ekipa</title>
+  <style>
+    :root {
+      --bg: #0b0b1c;
+      --panel: #17172d;
+      --panel-2: #23234a;
+      --accent: #7c6cff;
+      --accent-2: #a89bfd;
+      --green: #3ddc84;
+      --text: #f5f7ff;
+      --muted: #9aa2d6;
+      --line: rgba(255,255,255,0.08);
+      --shadow: 0 12px 26px rgba(0,0,0,0.25);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0b0b1c 0%, #15162a 100%);
+      color: var(--text);
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 12px 14px 94px;
+      text-align: center;
+    }
+
+    button, input { font: inherit; }
+
+    #head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    .logo {
+      font-size: 24px; font-weight: 800; letter-spacing: 0.02em;
+    }
+
+    .ico {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 12px;
+      font-size: 18px;
+      padding: 9px 11px;
+      margin-left: 6px;
+    }
+
+    .muted { color: var(--muted); }
+    .small { font-size: 12px; }
+
+    input {
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-size: 16px;
+      margin: 10px 0;
+      outline: none;
+    }
+
+    input::placeholder { color: #b9c0eb; }
+
+    .primary, .big, .join {
+      background: linear-gradient(135deg, var(--accent), #5f8dff);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-weight: 700;
+      font-size: 17px;
+      box-shadow: var(--shadow);
+    }
+
+    .primary { width: 100%; margin-top: 8px; }
+    .big {
+      flex: 1;
+      margin: 6px 4px 0;
+      min-height: 56px;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 9px 12px;
+      margin: 5px 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .chip.on {
+      border-color: rgba(61,220,132,0.9);
+      color: var(--green);
+      background: rgba(61,220,132,0.08);
+    }
+
+    .kat {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 12px 0 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-align: left;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px 18px;
+      margin: 12px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .av { font-size: 64px; }
+    .name { font-size: 28px; margin: 10px 0 6px; }
+    .pill {
+      display: inline-block;
+      background: rgba(124,108,255,0.12);
+      color: var(--accent-2);
+      border: 1px solid rgba(168,155,253,0.25);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      margin: 8px 0;
+    }
+
+    .act {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px 12px;
+      margin: 10px 0;
+      text-align: left;
+    }
+    .act b { display: block; margin-bottom: 6px; }
+    .act .m { color: var(--muted); font-size: 13px; }
+
+    .join {
+      background: rgba(61,220,132,0.18);
+      color: var(--green);
+      border: 1px solid rgba(61,220,132,0.3);
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .msgs {
+      margin: 10px 0 16px;
+      text-align: left;
+    }
+    .msg {
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin: 6px 0;
+      max-width: 82%;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .msg.me {
+      background: rgba(124,108,255,0.18);
+      border-color: rgba(124,108,255,0.4);
+      margin-left: auto;
+    }
+
+    #licz {
+      font-size: 14px; color: var(--green); margin: 6px 0; font-weight: 700;
+    }
+
+    .tab {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      max-width: 480px; margin: 0 auto;
+      background: rgba(20,20,46,0.96);
+      border-top: 1px solid var(--line);
+      display: flex;
+      backdrop-filter: blur(8px);
+      padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+    .tab button {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 11px;
+      padding: 10px 0 12px;
+      font-weight: 700;
+    }
+    .tab button.on { color: var(--accent-2); }
+
+    .row { display: flex; gap: 8px; }
+    .sr {
+      display: none;
+    }
+    .inline { display: inline-block; }
+  </style>
+</head>
+<body>
+  <div id="head">
+    <div class="logo">🙌 Ekipa</div>
+    <div>
+      <button class="ico" onclick="udostepnij()">📤</button>
+      <button class="ico" onclick="resetuj()">↺</button>
+    </div>
+  </div>
+
+  <div id="scr0">
+    <p class="muted">Znajdź ludzi do swoich pasji</p>
+    <input id="imie" placeholder="Twoje imię">
+    <input id="szukaj" placeholder="🔍 Szukaj pasji (np. rower)" oninput="filtr()">
+    <div id="licz">Wybrano: 0 (min. 2)</div>
+    <div id="chipy"></div>
+    <button class="primary" onclick="start()">Zaczynamy 🚀</button>
+  </div>
+
+  <div id="scr1" class="sr"></div>
+  <div id="scr2" class="sr"></div>
+  <div id="scr3" class="sr"></div>
+
+  <div id="tabs" class="tab" style="display:none">
+    <button id="t0" class="on" onclick="go(0)">🙌 Ekipa</button>
+    <button id="t1" onclick="go(1)">🔥 Aktywności</button>
+    <button id="t2" onclick="go(2)">💬 Czat</button>
+  </div>
+
+  <script>
+    const PASJE = {
+      Sport: ['bieganie','rower','siłownia','piłka nożna','koszykówka','tenis','badminton','pływanie','joga','taniec','sztuki walki','narty','snowboard'],
+      'Na świeżym powietrzu': ['wspinaczka','góry','kajaki','kemping','wędkarstwo','grzybiarstwo','ogrodnictwo','motoryzacja','astronomia'],
+      Kreatywnie: ['fotografia','rysowanie','muzyka','śpiew','gitara','pisanie','rękodzieło','modelarstwo'],
+      'Gry i geek': ['planszówki','gry komputerowe','RPG','anime','e-sport','programowanie'],
+      'Styl życia': ['kuchnia','kawa','wino','podróże','książki','kino','medytacja','wolontariat','psychologia'],
+      Zwierzęta: ['psy','koty','konie']
+    };
+
+    const LUDZIE = [
+      { n: 'Kasia', a: 27, e: '🧗‍♀️', p: ['wspinaczka','kuchnia'], b: 'Skałki, brownie i planszówki!' },
+      { n: 'Marek', a: 31, e: '🚴‍♂️', p: ['rower','podróże'], b: 'Weekendowe wypady za miasto.' },
+      { n: 'Ola', a: 24, e: '📚', p: ['książki','kino'], b: 'Kawa, książki, dyskusje do 3:00.' },
+      { n: 'Kuba', a: 28, e: '🎲', p: ['planszówki','gry komputerowe'], b: 'Organizuję wieczory gier!' },
+      { n: 'Ewa', a: 30, e: '⛰️', p: ['wspinaczka','góry'], b: 'Szukam ekipy w góry!' },
+      { n: 'Piotr', a: 33, e: '💪', p: ['siłownia','piłka nożna'], b: 'Trening to rytuał. Dołączysz?' },
+      { n: 'Ania', a: 26, e: '📷', p: ['fotografia','podróże'], b: 'Łapię światło o świcie.' },
+      { n: 'Zosia', a: 25, e: '🎬', p: ['kino','książki'], b: 'Festiwale filmowe to moje życie.' },
+      { n: 'Radek', a: 35, e: '🏍️', p: ['motoryzacja','góry'], b: 'Motocykl = wolność.' },
+      { n: 'Marta', a: 27, e: '💃', p: ['taniec','joga'], b: 'Salsa i zumba, energia 100!' },
+      { n: 'Jędrek', a: 26, e: '🐶', p: ['psy','bieganie'], b: 'Mój pies to mój trener personalny.' },
+      { n: 'Natalia', a: 29, e: '🎨', p: ['rysowanie','rękodzieło'], b: 'Szkicuję ludzi w kawiarniach.' },
+      { n: 'Bartek', a: 24, e: '🎸', p: ['gitara','śpiew'], b: 'Gram na każdej imprezie domowej.' },
+      { n: 'Karolina', a: 32, e: '🛶', p: ['kajaki','kemping'], b: 'Spływy to moje lato.' },
+      { n: 'Michał', a: 23, e: '🎮', p: ['e-sport','programowanie'], b: 'Koduję i gram. Klasyczny duet.' },
+      { n: 'Gosia', a: 28, e: '🐴', p: ['konie','ogrodnictwo'], b: 'Stajnia i ogród – mój azyl.' }
+    ];
+
+    const AKT = [
+      { t: 'Wieczór planszówek', m: 'czw 19:00 · Cafe Kulturalna', p: 6 },
+      { t: 'Skałka dla początkujących', m: 'sob 8:00 · ścianka OSIR', p: 5 },
+      { t: 'Rower wokół Wisły', m: 'sob 10:00 · Most Poniatowskiego', p: 8 },
+      { t: 'Wspólne gotowanie: ramen', m: 'pt 18:30 · u Kasi', p: 3 },
+      { t: 'Trening siłowy dla nowych', m: 'wt 20:00 · klub Fit', p: 4 },
+      { t: 'Photo-walk o świcie', m: 'nd 6:00 · Stare Miasto', p: 3 },
+      { t: 'Ognisko + gitara', m: 'sob 19:00 · lasek miejski', p: 5 },
+      { t: 'Mecz amatorów 6:6', m: 'nd 11:00 · Orlik', p: 10 },
+      { t: 'Kajaki – Zegrze', m: 'sob 9:00 · Zegrze Południowe', p: 6 }
+    ];
+
+    let me = { i: '', p: [] }, idx = 0, chaty = [];
+
+    const el = (id) => document.getElementById(id);
+
+    function zapisz() {
+      try { localStorage.setItem('ekipa', JSON.stringify({ me, idx, chaty })); } catch (e) {}
+    }
+
+    function wczytaj() {
+      try {
+        const d = JSON.parse(localStorage.getItem('ekipa'));
+        if (d && d.me && Array.isArray(d.me.p) && d.me.p.length > 1) {
+          me = d.me; idx = d.idx || 0; chaty = d.chaty || [];
+          return true;
+        }
+      } catch (e) {}
+      return false;
+    }
+
+    function resetuj() {
+      if (confirm('Zacząć od nowa?')) {
+        localStorage.removeItem('ekipa');
+        location.reload();
+      }
+    }
+
+    function udostepnij() {
+      const u = location.href;
+      if (navigator.share) {
+        navigator.share({ title: 'Ekipa 🙌', text: 'Znajdź ludzi do swoich pasji!', url: u }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(u).then(() => alert('Link skopiowany! 📋')).catch(() => alert('Skopiuj link: ' + u));
+      } else {
+        alert('Skopiuj link: ' + u);
+      }
+    }
+
+    function renderChips() {
+      let html = '';
+      for (const kat in PASJE) {
+        html += "<div class='katbox'><div class='kat'>" + kat + "</div>";
+        html += PASJE[kat].map((p) => "<span class='chip' data-p='" + p + "' onclick='tog(this)'>" + p + "</span>").join('');
+        html += '</div>';
+      }
+      el('chipy').innerHTML = html;
+    }
+
+    window.tog = function (elChip) {
+      const p = elChip.dataset.p;
+      elChip.classList.toggle('on');
+      const on = elChip.classList.contains('on');
+      me.p = on ? [...new Set([...me.p, p])] : me.p.filter((x) => x !== p);
+      el('licz').textContent = 'Wybrano: ' + me.p.length + (me.p.length < 2 ? ' (min. 2)' : ' ✓');
+      zapisz();
+    };
+
+    function filtr() {
+      const q = el('szukaj').value.trim().toLowerCase();
+      document.querySelectorAll('.katbox').forEach((box) => {
+        let any = false;
+        box.querySelectorAll('.chip').forEach((c) => {
+          const ok = c.dataset.p.toLowerCase().includes(q);
+          c.style.display = ok ? 'inline-block' : 'none';
+          if (ok) any = true;
+        });
+        box.style.display = any ? 'block' : 'none';
+      });
+    }
+
+    function start() {
+      me.i = el('imie').value.trim() || 'Ty';
+      if (me.p.length < 2) {
+        alert('Wybierz min. 2 pasje 🙂');
+        return;
+      }
+      zapisz();
+      el('scr0').style.display = 'none';
+      el('tabs').style.display = 'flex';
+      go(0);
+    }
+
+    function go(n) {
+      ['scr1','scr2','scr3'].forEach((id, i) => {
+        el(id).style.display = (i === n ? 'block' : 'none');
+      });
+      [0,1,2].forEach((j) => {
+        const btn = el('t' + j);
+        btn.classList.toggle('on', j === n);
+      });
+      if (n === 0) deck();
+      if (n === 1) akty();
+      if (n === 2) chat();
+    }
+
+    function deck() {
+      const u = LUDZIE[idx];
+      const h = el('scr1');
+      if (!u) {
+        h.innerHTML = "<div class='card'><p>To na razie wszyscy!<br><br><button class='primary' onclick='idx=0;zapisz();deck()'>Jeszcze raz 🔄</button></p></div>";
+        return;
+      }
+      const wsp = me.p.filter((p) => u.p.includes(p));
+      h.innerHTML = "<div class='card'>" +
+        "<div class='av'>" + u.e + "</div>" +
+        "<div class='name'>" + u.n + ', ' + u.a + "</div>" +
+        "<div class='pill'>" + u.p.map((p) => '#' + p).join(' ') + "</div>" +
+        "<p class='muted'>" + u.b + "</p>" +
+        (wsp.length ? "<p style='color:#3ddc84; margin-top:12px;'>✨ Pasuje Wam: " + wsp.map((p) => '#' + p).join(', ') + "</p>" : '') +
+        "</div>" +
+        "<div class='row'><button class='big' onclick='swipe(0)'>✕ Nie</button><button class='big' onclick='swipe(1)'>💬 Poznajmy się</button></div>";
+    }
+
+    window.swipe = function (l) {
+      const u = LUDZIE[idx];
+      idx++;
+      if (l) {
+        chaty.push({
+          k: 'u:' + u.n,
+          e: u.e,
+          ms: [{ me: 0, t: 'Hej! 😄 Fajnie, że też ' + u.p[0] + '! Jak często to robisz?' }]
+        });
+        alert('🎉 Nowy kontakt: ' + u.n + '! Zajrzyj do 💬 Czat');
+      }
+      zapisz();
+      deck();
+    };
+
+    function akty() {
+      el('scr2').innerHTML = AKT.map((a, i) =>
+        "<div class='act'><b>" + a.t + "</b><div class='m'>" + a.m + "</div><div class='m'>👥 " + a.p + " osób</div><button class='join' onclick='doloj(" + i + ")'>Dołącz</button></div>"
+      ).join('');
+    }
+
+    window.doloj = function (i) {
+      const a = AKT[i];
+      a.p++;
+      chaty.push({ k: 'a:' + a.t, e: '🔥', ms: [{ me: 0, t: 'Organizator: Super, że dołączasz! Do zobaczenia 🙌' }] });
+      zapisz();
+      akty();
+      alert('Dołączyłeś do: ' + a.t + ' ✅');
+    };
+
+    function chat() {
+      const h = el('scr3');
+      if (!chaty.length) {
+        h.innerHTML = "<div class='card'><p class='muted'>Brak rozmów. Polub kogoś w 🙌 lub dołącz do 🔥</p></div>";
+        return;
+      }
+      h.innerHTML = chaty.map((c, i) => "<div class='act' style='cursor:pointer' onclick='otworz(" + i + ")'>" + c.e + " <b>" + c.k.slice(2) + "</b><div class='m'>" + c.ms[c.ms.length - 1].t.slice(0, 40) + "...</div></div>").join('');
+    }
+
+    window.otworz = function (i) {
+      const c = chaty[i];
+      el('scr3').innerHTML = "<div class='card'><button class='ico' onclick='go(2)'>←</button><h2 style='margin:10px 0'>" + c.e + ' ' + c.k.slice(2) + "</h2><div id='cm' class='msgs'></div><input id='ci' placeholder='Wiadomość...'><button class='primary' onclick='wyslij(" + i + ")'>Wyślij ➤</button></div>";
+      pokaz(i);
+    };
+
+    function pokaz(i) {
+      const elCm = el('cm');
+      if (!elCm) return;
+      elCm.innerHTML = chaty[i].ms.map((m) => "<div class='msg" + (m.me ? ' me' : '') + "'>" + m.t + "</div>").join('');
+    }
+
+    window.wyslij = function (i) {
+      const inp = el('ci');
+      const t = inp.value.trim();
+      if (!t) return;
+      inp.value = '';
+      chaty[i].ms.push({ me: 1, t });
+      pokaz(i);
+      zapisz();
+
+      const odp = ['Brzmi super! 😄', 'Ustalmy szczegóły!', '+1!', 'Haha, dokładnie to samo myślę 😅', 'Wchodzę w to! 🙌'];
+      setTimeout(() => {
+        chaty[i].ms.push({ me: 0, t: odp[Math.floor(Math.random() * odp.length)] });
+        pokaz(i);
+        zapisz();
+      }, 900);
+    };
+
+    renderChips();
+    if (wczytaj()) {
+      el('scr0').style.display = 'none';
+      el('tabs').style.display = 'flex';
+      go(0);
+    }
+  </script>
+</body>
+</html>
