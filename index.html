@@ -209,9 +209,7 @@
     .tab button.on { color: var(--accent-2); }
 
     .row { display: flex; gap: 8px; }
-    .sr {
-      display: none;
-    }
+    .sr { display: none; }
     .inline { display: inline-block; }
   </style>
 </head>
@@ -285,8 +283,16 @@
     ];
 
     let me = { i: '', p: [] }, idx = 0, chaty = [];
-
     const el = (id) => document.getElementById(id);
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
 
     function zapisz() {
       try { localStorage.setItem('ekipa', JSON.stringify({ me, idx, chaty })); } catch (e) {}
@@ -432,19 +438,27 @@
         h.innerHTML = "<div class='card'><p class='muted'>Brak rozmów. Polub kogoś w 🙌 lub dołącz do 🔥</p></div>";
         return;
       }
-      h.innerHTML = chaty.map((c, i) => "<div class='act' style='cursor:pointer' onclick='otworz(" + i + ")'>" + c.e + " <b>" + c.k.slice(2) + "</b><div class='m'>" + c.ms[c.ms.length - 1].t.slice(0, 40) + "...</div></div>").join('');
+
+      h.innerHTML = chaty.map((c, i) => {
+        const last = (c.ms && c.ms.length) ? c.ms[c.ms.length - 1].t : '';
+        const preview = escapeHtml(last.length > 40 ? last.slice(0, 40) + '...' : last);
+        return "<div class='act' style='cursor:pointer' onclick='otworz(" + i + ")'>" +
+          c.e + " <b>" + escapeHtml(c.k.slice(2)) + "</b>" +
+          "<div class='m'>" + preview + "</div>" +
+          "</div>";
+      }).join('');
     }
 
     window.otworz = function (i) {
       const c = chaty[i];
-      el('scr3').innerHTML = "<div class='card'><button class='ico' onclick='go(2)'>←</button><h2 style='margin:10px 0'>" + c.e + ' ' + c.k.slice(2) + "</h2><div id='cm' class='msgs'></div><input id='ci' placeholder='Wiadomość...'><button class='primary' onclick='wyslij(" + i + ")'>Wyślij ➤</button></div>";
+      el('scr3').innerHTML = "<div class='card'><button class='ico' onclick='go(2)'>←</button><h2 style='margin:10px 0'>" + c.e + ' ' + escapeHtml(c.k.slice(2)) + "</h2><div id='cm' class='msgs'></div><input id='ci' placeholder='Wiadomość...'><button class='primary' onclick='wyslij(" + i + ")'>Wyślij ➤</button></div>";
       pokaz(i);
     };
 
     function pokaz(i) {
       const elCm = el('cm');
       if (!elCm) return;
-      elCm.innerHTML = chaty[i].ms.map((m) => "<div class='msg" + (m.me ? ' me' : '') + "'>" + m.t + "</div>").join('');
+      elCm.innerHTML = (chaty[i].ms || []).map((m) => "<div class='msg" + (m.me ? ' me' : '') + "'>" + escapeHtml(m.t) + "</div>").join('');
     }
 
     window.wyslij = function (i) {
